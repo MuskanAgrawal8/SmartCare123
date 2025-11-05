@@ -2,6 +2,8 @@ import jwt from 'jsonwebtoken'
 
 // doctor authentication middleware
 const authDoctor = async (req, res, next) => {
+    
+    console.log("authDoctor()--->")
     const { dtoken } = req.headers
     if (!dtoken) {
         return res.json({ success: false, message: 'Not Authorized Login Again' })

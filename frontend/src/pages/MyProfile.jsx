@@ -48,16 +48,53 @@ const MyProfile = () => {
     return userData ? (
         <div className='max-w-lg flex flex-col gap-2 text-sm pt-5'>
 
-            {isEdit
-                ? <label htmlFor='image' >
-                    <div className='inline-block relative cursor-pointer'>
-                        <img className='w-36 rounded opacity-75' src={image ? URL.createObjectURL(image) : userData.image} alt="" />
-                        <img className='w-10 absolute bottom-12 right-12' src={image ? '' : assets.upload_icon} alt="" />
-                    </div>
-                    <input onChange={(e) => setImage(e.target.files[0])} type="file" id="image" hidden />
-                </label>
-                : <img className='w-36 rounded' src={userData.image} alt="" />
-            }
+{isEdit ? (
+  <div className="relative inline-block">
+    {/* Clickable circle */}
+    <div
+      onClick={() => document.getElementById("profile-image-input").click()}
+      className="w-36 h-36 rounded-full bg-indigo-50 border-2 border-gray-300 flex items-center justify-center cursor-pointer overflow-hidden hover:bg-indigo-100 transition-all"
+    >
+      {/* Show selected or existing image */}
+      <img
+        className="w-full h-full object-cover rounded-full"
+        src={image ? URL.createObjectURL(image) : userData.image || assets.user_icon}
+        alt="Profile"
+      />
+    </div>
+
+    {/* Upload icon overlay */}
+    <img
+      className="w-8 absolute bottom-3 right-3 bg-white rounded-full p-1 shadow cursor-pointer"
+      src={assets.upload_icon}
+      alt="Upload Icon"
+      onClick={() => document.getElementById("profile-image-input").click()}
+    />
+
+    {/* Hidden input for file selection */}
+    <input
+      type="file"
+      id="profile-image-input"
+      accept="image/png, image/jpeg, image/jpg, image/webp"
+      hidden
+      onChange={(e) => {
+        const file = e.target.files[0];
+        if (file && ["image/jpeg", "image/png", "image/jpg", "image/webp"].includes(file.type)) {
+          setImage(file);
+        } else {
+          toast.error("Please upload a valid image file (JPG, PNG, or WEBP).");
+        }
+      }}
+    />
+  </div>
+) : (
+  <img
+    className="w-36 h-36 object-cover rounded-full border-2 border-gray-300"
+    src={userData.image || assets.user_icon}
+    alt="Profile"
+  />
+)}
+
 
             {isEdit
                 ? <input className='bg-gray-50 text-3xl font-medium max-w-60' type="text" onChange={(e) => setUserData(prev => ({ ...prev, name: e.target.value }))} value={userData.name} />
@@ -73,10 +110,26 @@ const MyProfile = () => {
                     <p className='text-blue-500'>{userData.email}</p>
                     <p className='font-medium'>Phone:</p>
 
-                    {isEdit
-                        ? <input className='bg-gray-50 max-w-52' type="text" onChange={(e) => setUserData(prev => ({ ...prev, phone: e.target.value }))} value={userData.phone} />
-                        : <p className='text-blue-500'>{userData.phone}</p>
-                    }
+                   {isEdit ? (
+  <input
+    className="bg-gray-50 max-w-52"
+    type="text"
+    maxLength="10"
+    onChange={(e) => {
+      const value = e.target.value;
+      // Allow only numbers (no letters/symbols)
+      if (/^\d*$/.test(value)) {
+        setUserData((prev) => ({ ...prev, phone: value }));
+      }
+    }}
+    value={userData.phone}
+    placeholder="Enter 10-digit phone"
+  />
+) : (
+  <p className="text-blue-500">{userData.phone}</p>
+)}
+
+                    
 
                     <p className='font-medium'>Address:</p>
 

@@ -1,14 +1,29 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- ✅ Favicon (fixed syntax) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+
+    <!-- ✅ Font Awesome CDN -->
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prescripto</title>
+    <title>SmartCare</title>
   </head>
-  <body >
-    <div id="root" ></div>
+
+  <body>
+    <div id="root"></div>
+
+    <!-- ✅ React entry script -->
     <script type="module" src="/src/main.jsx"></script>
+
+    <!-- ✅ Razorpay checkout -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   </body>
 </html>

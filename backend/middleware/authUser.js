@@ -1,10 +1,13 @@
 import jwt from 'jsonwebtoken'
+import { HTTP_STATUS_CODE } from '../constants/httpStatusCode.js';
 
 // user authentication middleware
 const authUser = async (req, res, next) => {
     const { token } = req.headers
     if (!token) {
-        return res.json({ success: false, message: 'Not Authorized Login Again' })
+        return res
+            .status(HTTP_STATUS_CODE.UNAUTHORIZED)
+            .json({ success: false, message: 'Not Authorized Login Again' })
     }
     try {
         const token_decode = jwt.verify(token, process.env.JWT_SECRET)

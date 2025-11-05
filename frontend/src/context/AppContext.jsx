@@ -1,81 +1,87 @@
 import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import axios from 'axios'
+import axios from "axios";
 
-export const AppContext = createContext()
+// Create the context
+export const AppContext = createContext();
 
-const AppContextProvider = (props) => {
+const AppContextProvider = ({ children }) => {
+  
+  const currencySymbol = "₹";
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-    const currencySymbol = '₹'
-    const backendUrl = import.meta.env.VITE_BACKEND_URL
+  const [doctors, setDoctors] = useState([]);
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    const [doctors, setDoctors] = useState([])
-    const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : '')
-    const [userData, setUserData] = useState(false)
-
-    // Getting Doctors using API
-    const getDoctosData = async () => {
-
-        try {
-
-            const { data } = await axios.get(backendUrl + '/api/doctor/list')
-            if (data.success) {
-                setDoctors(data.doctors)
-            } else {
-                toast.error(data.message)
-            }
-
-        } catch (error) {
-            console.log(error)
-            toast.error(error.message)
-        }
-
+  // Fetch all doctors
+  const getDoctorsData = async () => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/api/doctor/list`);
+      if (data.success) {
+        setDoctors(data.doctors);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching doctors:", error);
+      toast.error(error.message);
     }
+  };
 
-    // Getting User Profile using API
-    const loadUserProfileData = async () => {
+  //  Fetch user profile
+  const loadUserProfileData = async () => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/api/user/get-profile`, {
+        headers: { token },
+      });
 
-        try {
-
-            const { data } = await axios.get(backendUrl + '/api/user/get-profile', { headers: { token } })
-
-            if (data.success) {
-                setUserData(data.userData)
-            } else {
-                toast.error(data.message)
-            }
-
-        } catch (error) {
-            console.log(error)
-            toast.error(error.message)
-        }
-
+      if (data.success) {
+        setUserData(data.userData);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
     }
+  };
 
-    useEffect(() => {
-        getDoctosData()
-    }, [])
+  //  Load doctors on app start
+  useEffect(() => {
+    getDoctorsData();
+  }, []);
 
-    useEffect(() => {
-        if (token) {
-            loadUserProfileData()
-        }
-    }, [token])
+  // Load user profile if token exists
+  useEffect(() => {
+    const fetchData = async () => {
+      if (token) {
+        await loadUserProfileData();
+      }
+      setLoading(false); // Set loading complete
+    };
+    fetchData();
+  }, [token]);
 
-    const value = {
-        doctors, getDoctosData,
-        currencySymbol,
-        backendUrl,
-        token, setToken,
-        userData, setUserData, loadUserProfileData
-    }
+  // Provide all values globally
+  const value = {
+    doctors,
+    getDoctorsData,
+    currencySymbol,
+    backendUrl,
+    token,
+    setToken,
+    userData,
+    setUserData,
+    loadUserProfileData,
+    loading,
+  };
 
-    return (
-        <AppContext.Provider value={value}>
-            {props.children}
-        </AppContext.Provider>
-    )
+  return (
+    <AppContext.Provider value={value}>
+      {children}
+    </AppContext.Provider>
+  );
+};
 
-}
-
-export default AppContextProvider
+export default AppContextProvider;

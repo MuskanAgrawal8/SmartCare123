@@ -1,23 +1,107 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ----------------------------------------------------------
+   🌟 Global Font
+   ---------------------------------------------------------- */
 * {
-    font-family: Outfit;
+  font-family: "Outfit", sans-serif;
 }
 
+/* ----------------------------------------------------------
+   🌟 Active Menu Styles
+   ---------------------------------------------------------- */
 .active hr {
-    @apply block
+  @apply block;
 }
 
-@media (max-width:740px) {
-    .active  p{
-       @apply text-white bg-primary
-    }
+@media (max-width: 740px) {
+  .active p {
+    @apply text-white bg-primary;
+  }
 }
 
+/* ----------------------------------------------------------
+   🌟 Hide Scrollbar
+   ---------------------------------------------------------- */
 ::-webkit-scrollbar {
-    @apply hidden
+  @apply hidden;
+}
+
+/* ----------------------------------------------------------
+   🌟 Custom Animations for Team Section & Floating Blobs
+   ---------------------------------------------------------- */
+
+/* Fade-in + slide-up animation */
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Floating blob animation for background visuals */
+@keyframes floatBlob {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.05);
+  }
+}
+
+/* ----------------------------------------------------------
+   🌟 Animation Utility Classes
+   ---------------------------------------------------------- */
+
+/* Fade/slide animation for text, titles, or cards */
+.animate-fadeSlide {
+  animation: fadeSlideUp 0.8s ease forwards;
+  opacity: 0;
+}
+
+/* Team card fade-up animation */
+.team-card {
+  animation: fadeSlideUp 0.8s ease forwards;
+  opacity: 0;
+}
+
+/* Floating blobs */
+.animate-floatBlob {
+  animation: floatBlob 10s ease-in-out infinite;
+}
+
+/* Delay helpers for staggered animations */
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-5000 {
+  animation-delay: 5s;
+}
+
+/* ----------------------------------------------------------
+   🌟 Hover Effects for Team Cards
+   ---------------------------------------------------------- */
+.team-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* ----------------------------------------------------------
+   🌟 Optional Scroll Behavior
+   ---------------------------------------------------------- */
+html,
+body {
+  scroll-behavior: smooth;
+  background-color: #ffffff;
 }
