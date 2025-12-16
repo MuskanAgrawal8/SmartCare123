@@ -47,7 +47,7 @@ import muskan from "./muskan.jpg";
 import jashoda from "./jashoda.jpg";
 import dibya from "./dibya.jpg";
 import anubhav from "./anubhav.jpg";
-import mamuni from "./mamuni.jpg";
+import mamuni from "./Mamuni.jpg";
 import Nihar from "./Nihar.jpg";
 import kaibalya from "./kaibalya.jpg";
 import hrithik from "./hrithik.jpg";
